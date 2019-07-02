@@ -2,7 +2,7 @@ all: jar runner
 
 playground.jar:
 	mvn package
-	find target -name "*jar-with-dependencies.jar" -exec cp {} ./playground.jar \;
+	find target -name "*jar-with-dependencies.jar" -exec mv {} ./playground.jar \;
 
 jar: playground.jar
 

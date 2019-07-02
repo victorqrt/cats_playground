@@ -6,7 +6,7 @@ import cats.implicits._
 object Main extends App {
 
   /*
-   * The Show typeclass is encoding some "toString"-like behaviour
+   * The Show typeclass is encoding some toString-like behaviour
    */
 
   val stringShow = Show.apply[String]
@@ -14,21 +14,35 @@ object Main extends App {
 
   final case class Kitty(name: String, age: Int, color: String)
 
+  // Show.show[A](f: A => String): Show[A]
   implicit val kittyShow: Show[Kitty] = Show.show {
-    case k => s"${k.name.show} is a ${k.age.show} years old ${k.color.show} kitty"
+    k => s"${k.name.show} is a ${k.age.show} years old ${k.color.show} kitty"
   }
 
-  println(Kitty("Garfield", 12, "red").show)
+  val kitty1 = Kitty("Garfield", 7, "orange")
+  println(kitty1.show)
 
   /*
    * Eq provides methods for typesafe comparison
    */
 
   val optEq = Eq.apply[Option[Int]]
-  println(
-    // We would need to retype as we only have an implicit instance for the superclass
-    // (Some(1): Option[Int]) =!= (None: Option[Int])
-    Option(1) =!= Option.empty[Int]
-  )
+  
+  /* Here we would need to retype as we only have
+   * an implicit instance for the superclass:
+   * (Some(1): Option[Int]) =!= (None: Option[Int])
+   */
+  assert(Option(1) =!= Option.empty[Int])
+
+  implicit val catEq: Eq[Kitty] = Eq.instance[Kitty] {
+    (k1, k2) => (
+      k1.name === k2.name && k1.age === k2.age && k1.color === k2.color
+    )
+  }
+
+  val kitty2 = Kitty("Brice", 9, "blue")
+  assert(kitty1 =!= kitty2)
+
+  assert(Option(kitty1) =!= Option.empty[Kitty])
 
 }

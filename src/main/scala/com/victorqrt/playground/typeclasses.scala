@@ -1,4 +1,4 @@
-object TypeClasses extends App {
+object TypeClasses {
 
   case class Person(name: String, email: String)
 
@@ -27,5 +27,5 @@ object TypeClasses extends App {
       e.equals(a, _a)
   }
 
-  println(Person("Noel", "noel2222@example.com") =?= Person("Noel", "noel@example.com"))
+  assert(Person("Noel", "noel2222@example.com") =?= Person("Noel", "noel@example.com"))
 }

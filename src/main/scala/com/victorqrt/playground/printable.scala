@@ -2,7 +2,7 @@
 final case class Cat(name: String, age: Int, color: String)
 
 // Type class
-trait Printable[A] {
+trait Printable[-A] {
   def printify(value: A): String
 }
 
@@ -30,14 +30,4 @@ object Printable {
     def printify(value: Cat) =
       s"${value.name.printify} is a ${value.age.printify} years old ${value.color.printify} cat"
   }
-}
-
-object Main extends App {
-
-  import Printable._
-
-  println("Yo".printify)
-  println(789.printify)
-
-  println(Cat("Felix", 9, "blue").printify)
 }

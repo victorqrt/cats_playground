@@ -1,4 +1,4 @@
-object Main extends App {
+object _JSON_ {
 
   import JSON._
   
