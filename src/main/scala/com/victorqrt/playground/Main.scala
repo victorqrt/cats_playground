@@ -9,7 +9,7 @@ import javafx.scene.{Parent, Scene}
 import javafx.application.Application
 
 import com.victorqrt.playground.Gui._
-import com.victorqrt.playground.Monoid._
+import com.victorqrt.playground.MyMonoid.{BooleanMyMonoid_And, MyMonoidClass}
 
 object Main extends App {
   Application.launch(classOf[Playground], args: _*)
@@ -55,6 +55,11 @@ object Main extends App {
     assert(kitty1 =!= kitty2)
 
     assert(Option(kitty1) =!= Option.empty[Kitty])
+
+    // Using the AND typeclass instance (see Monoids.scala)
+    assert(true.empty)
+
+    Tests.run
   }
 }
 
