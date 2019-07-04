@@ -12,7 +12,7 @@ object MyMonoid {
   
   def apply[A](implicit mon: MyMonoid[A]) = mon
 
-  implicit class MyMonoidClass[A](a: A) {
+  implicit class MyMonoidOps[A](a: A) {
 
     def combine(x: A, y: A)(implicit ma: MyMonoid[A]): A =
       ma.combine(x, y)

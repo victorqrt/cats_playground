@@ -5,14 +5,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:controller="com.victorqrt.playground.Gui" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.victorqrt.playground.Gui">
    <children>
-      <TextArea fx:id="txtArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="404.0" prefWidth="554.0">
+      <TextArea fx:id="txtArea" editable="false" layoutX="20.0" layoutY="19.0" prefHeight="279.0" prefWidth="577.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="19.0">
          <font>
-            <Font name="Consolas" size="13.0" />
+            <Font name="Consolas" size="14.0" />
          </font>
       </TextArea>
-      <Button fx:id="gtfo" layoutX="265.0" layoutY="428.0" mnemonicParsing="false" onAction="#exitapp" text="gtfo" />
+      <Button fx:id="gtfo" layoutX="291.0" layoutY="313.0" mnemonicParsing="false" onAction="#exitapp" text="gtfo" AnchorPane.bottomAnchor="14.0" />
    </children>
 </AnchorPane>
