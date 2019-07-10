@@ -2,8 +2,12 @@ package com.victorqrt.playground
 
 import cats._
 import cats.implicits._
+import scala.concurrent._
+import scala.concurrent.duration._
 import scala.util.{Try, Success, Failure}
+import scala.concurrent.ExecutionContext.Implicits.global
 
+import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
 import com.victorqrt.playground.MyMonoid.{BooleanMyMonoid_And, MyMonoidOps}
 
@@ -94,6 +98,32 @@ object Tests {
       assert((Order(3.14, 2.0) |+| Order(2.86, 4.0)) ==  Order(6.0, 6.0))
 
       assert(t.map(2 * _) == Branch(Leaf(2), Leaf(4)))
+      
+      import com.victorqrt.playground.EvalExercise.foldRightEval
+      val m = 50000
+      assert(
+        foldRightEval((1 to m).toList, 0: BigInt)(_ + _).value == BigInt(m) * (m + 1) / 2
+      )
+
+      import com.victorqrt.playground.WriterExercise._
+
+      val Vector((log1, ans1), (log2, ans2)) =
+        Await.result(
+          Future.sequence(
+            Vector(
+              Future(factorial(3).run),
+              Future(factorial(4).run)
+            )
+          ),
+          5.seconds
+        )
+
+      assert(
+           log1.mkString(", ") == "fact 0: 1, fact 1: 1, fact 2: 2, fact 3: 6"
+        && ans1 == 6
+        && log2.mkString(", ") == "fact 0: 1, fact 1: 1, fact 2: 2, fact 3: 6, fact 4: 24"
+        && ans2 == 24
+      )
     }
 
     Try(go) match {
