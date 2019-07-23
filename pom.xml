@@ -87,6 +87,16 @@
                <goal>single</goal>
 	    </goals>
 	  </execution>
+    </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1</version>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
         </executions>
       </plugin>
     </plugins>

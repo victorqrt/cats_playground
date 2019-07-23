@@ -37,6 +37,8 @@ class Playground extends Application {
     primaryStage.sizeToScene();
     primaryStage.show
 
-    Tests.run
+    new Thread {
+      override def run { Tests.run }
+    }.start
   }
 }

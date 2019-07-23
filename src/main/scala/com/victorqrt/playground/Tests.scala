@@ -76,9 +76,12 @@ object Tests {
 
     def go {
 
-      assert(kitty1.show == "Garfield is a 7 years old orange kitty")
-      
-      assert(kitty1 =!= kitty2)
+      println("Running  tests...")
+
+      assert(
+           kitty1.show == "Garfield is a 7 years old orange kitty"
+        && kitty1 =!= kitty2
+      )
       
       /* 
        * Here we would need to retype as we only have
@@ -92,12 +95,12 @@ object Tests {
       assert(true.empty)
 
       val n = 42
-      assert(add(1 to n toList) == n * (n + 1) / 2)
-      assert(add(List(Some(1), Some(2), None)) == Some(3))
-
-      assert((Order(3.14, 2.0) |+| Order(2.86, 4.0)) ==  Order(6.0, 6.0))
-
-      assert(t.map(2 * _) == Branch(Leaf(2), Leaf(4)))
+      assert(
+           add(1 to n toList) == n * (n + 1) / 2
+        && add(List(Some(1), Some(2), None)) == Some(3)
+        && (Order(3.14, 2.0) |+| Order(2.86, 4.0)) ==  Order(6.0, 6.0)
+        && t.map(2 * _) == Branch(Leaf(2), Leaf(4))
+      )
       
       import com.victorqrt.playground.EvalExercise.foldRightEval
       val m = 50000
@@ -123,6 +126,27 @@ object Tests {
         && ans1 == 6
         && log2.mkString(", ") == "fact 0: 1, fact 1: 1, fact 2: 2, fact 3: 6, fact 4: 24"
         && ans2 == 24
+      )
+
+      import com.victorqrt.playground.ReaderExercise._
+
+      assert(
+           kittyName.run(kitty1) == "Garfield"
+        && greetKitty.run(kitty1) == "Hello Garfield"
+        && greetAndFeed.run(kitty1) == "Hello Garfield. Eat something, Garfield."
+      )
+
+      val myDB = Db(
+        Map(0 -> "root", 1 -> "user"),
+        Map("root" -> "root", "user" -> "pass")
+      )
+
+      assert(
+           findUsername(0).run(myDB) == Some("root")
+        && findUsername(42).run(myDB) == None
+        && checkPassword("user", "pass").run(myDB)
+        && !checkPassword("root", "pass").run(myDB)
+        && !checkPassword("john", "pass").run(myDB)
       )
     }
 
