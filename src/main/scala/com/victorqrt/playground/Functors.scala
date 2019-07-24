@@ -21,12 +21,22 @@ object MyFunctor {
    */
 
   object Tree {
+    
     def map[A, B](t: Tree[A])(f: A => B): Tree[B] =
       t.fold(x => Leaf(f(x)): Tree[B])(Branch(_, _))
+
+    def branch[A](left: Tree[A], right: Tree[A]): Tree[A] =
+      Branch(left, right)
+
+    def leaf[A](a: A): Tree[A] = Leaf(a)
   }
 
+  /*
+   * This is commented because we introduce a Monad instance
+   * for Tree later on
+   *
   implicit object TreeFunctor extends Functor[Tree] {
     def map[A, B](t: Tree[A])(f: A => B): Tree[B] =
       Tree.map(t)(f)
-  }
+  }*/
 }

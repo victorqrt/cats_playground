@@ -3,9 +3,13 @@ package com.victorqrt.playground
 import cats._
 import cats.implicits._
 import cats.data.{Reader, State, Writer}
+import scala.annotation.tailrec
+
+import com.victorqrt.playground.MyFunctor._
+import com.victorqrt.playground.MyFunctor.Tree._
 
 trait MyMonad[F[_]] {
-    
+
   def pure[A](a: A): F[A]
 
   def flatMap[A, B](value: F[A])(f: A => F[B]): F[B]
@@ -82,5 +86,82 @@ object ReaderExercise {
       matches <- user.map(checkPassword(_, password)) getOrElse false.pure[DbReader]
     } yield matches
   */
+}
 
+object PostOrderCalc {
+
+  type CalcState[A] = State[List[Int], A]
+
+  def evalOne(sym: String): CalcState[Int] =
+    sym match {
+      case "+" => operator(_ + _)
+      case "-" => operator(_ - _)
+      case "*" => operator(_ * _)
+      case "/" => operator(_ / _)
+      case n => operand(n.toInt)
+    }
+
+  def evalAll(syms: List[String]): CalcState[Int] =
+    syms.foldLeft(evalOne("0")) {
+      (a, b) => a.flatMap(_ => evalOne(b))
+    }
+
+  def evalInput(input: String): Int =
+    evalAll(input.split(" ").toList).runA(Nil).value
+
+  def operand(n: Int): CalcState[Int] =
+    State[List[Int], Int] {
+      s => (n :: s, n)
+    }
+
+  def operator(f: (Int, Int) => Int): CalcState[Int] =
+    State[List[Int], Int] {
+
+      case a :: b :: t => {
+        val ans = f(a, b)
+        (ans :: t, ans)
+      }
+
+      case _ => sys.error("Fail")
+    }
+}
+
+object TreeExercise {
+
+  implicit object TreeMonad extends Monad[Tree] {
+
+    def pure[A](a: A) = Leaf(a)
+
+    def flatMap[A, B](tree: Tree[A])(f: A => Tree[B]): Tree[B] =
+      tree.fold(f)(Branch(_, _))
+
+    def tailRecM[A, B](a: A)(f: A => Tree[Either[A, B]]): Tree[B] = {
+
+      @tailrec
+      def loop(open: List[Tree[Either[A, B]]], closed: List[Option[Tree[B]]]): List[Tree[B]] =
+        open match {
+          
+          case Branch(l, r) :: next =>
+            loop(l :: r :: next, None :: closed)
+
+          case Leaf(Left(value)) :: next =>
+            loop(f(value) :: next, closed)
+
+          case Leaf(Right(value)) :: next =>
+            loop(next, Some(pure(value)) :: closed)
+
+          case Nil =>
+            closed.foldLeft(Nil: List[Tree[B]]) {
+              (acc, maybeTree) => {
+                maybeTree.map(_ :: acc).getOrElse {
+                  val left :: right :: tail = acc
+                  branch(left, right) :: tail
+                }
+              }
+            }
+        }
+
+      loop(List(f(a)), Nil).head
+    }
+  }
 }

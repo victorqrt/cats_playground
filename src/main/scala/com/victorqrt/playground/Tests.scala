@@ -2,6 +2,7 @@ package com.victorqrt.playground
 
 import cats._
 import cats.implicits._
+import cats.data.EitherT
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Try, Success, Failure}
@@ -9,6 +10,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
+import com.victorqrt.playground.TreeExercise._
+import com.victorqrt.playground.PostOrderCalc._
+import com.victorqrt.playground.WriterExercise._
+import com.victorqrt.playground.ReaderExercise._
+import com.victorqrt.playground.MyFunctor.Tree._
+import com.victorqrt.playground.MonadTransformers._
+import com.victorqrt.playground.EvalExercise.foldRightEval
 import com.victorqrt.playground.MyMonoid.{BooleanMyMonoid_And, MyMonoidOps}
 
 object Tests {
@@ -102,13 +110,10 @@ object Tests {
         && t.map(2 * _) == Branch(Leaf(2), Leaf(4))
       )
       
-      import com.victorqrt.playground.EvalExercise.foldRightEval
       val m = 50000
       assert(
         foldRightEval((1 to m).toList, 0: BigInt)(_ + _).value == BigInt(m) * (m + 1) / 2
       )
-
-      import com.victorqrt.playground.WriterExercise._
 
       val Vector((log1, ans1), (log2, ans2)) =
         Await.result(
@@ -128,8 +133,6 @@ object Tests {
         && ans2 == 24
       )
 
-      import com.victorqrt.playground.ReaderExercise._
-
       assert(
            kittyName.run(kitty1) == "Garfield"
         && greetKitty.run(kitty1) == "Hello Garfield"
@@ -148,6 +151,24 @@ object Tests {
         && !checkPassword("root", "pass").run(myDB)
         && !checkPassword("john", "pass").run(myDB)
       )
+
+      assert(
+           evalOne("42").runA(Nil).value == 42
+        && evalAll(List("6", "6", "+", "5", "*")).runA(Nil).value == 60
+        && evalInput("1 2 + 3 4 + *") == 21
+      )
+
+      val treeTest =
+        for {
+          t1 <- branch(leaf(2), t)
+          newT <- leaf(2 * t1)
+        } yield newT
+
+      assert(
+        treeTest == Branch(Leaf(4), Branch(Leaf(2), Leaf(4)))
+      )
+
+      println(getPowerLevel("Goldorak"))
     }
 
     Try(go) match {
