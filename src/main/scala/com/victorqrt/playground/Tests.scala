@@ -4,9 +4,10 @@ import cats._
 import cats.implicits._
 import cats.data.EitherT
 import scala.concurrent._
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Try, Success, Failure}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Try, Success, Failure}
 
 import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
@@ -168,7 +169,14 @@ object Tests {
         treeTest == Branch(Leaf(4), Branch(Leaf(2), Leaf(4)))
       )
 
-      println(getPowerLevel("Goldorak"))
+      assert(
+           Await.result(getPowerLevel("Jazz").value, 1.second) == Right(6)
+        && Await.result(getPowerLevel("Goldorak").value, 1.second) == Left("Goldorak unreachable")
+        && Await.result(canSpecialMove("Jazz", "Hot Rod").value, 1.second)  == Right(true)
+        && Await.result(canSpecialMove("Jazz", "Bumblebee").value, 1.second)  == Right(false)
+        && Await.result(canSpecialMove("Jazz", "Goldorak").value, 1.second) == Left("Goldorak unreachable")
+        && tacticalReport("Jazz", "Hot Rod") == "Yes"
+      )
     }
 
     Try(go) match {
