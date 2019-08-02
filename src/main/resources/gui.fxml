@@ -12,6 +12,6 @@
             <Font name="Consolas" size="14.0" />
          </font>
       </TextArea>
-      <Button fx:id="gtfo" layoutX="291.0" layoutY="313.0" mnemonicParsing="false" onAction="#exitapp" text="gtfo" AnchorPane.bottomAnchor="14.0" />
+      <Button fx:id="exit" layoutX="291.0" layoutY="313.0" mnemonicParsing="false" onAction="#exitapp" text="Exit" AnchorPane.bottomAnchor="14.0" />
    </children>
 </AnchorPane>

@@ -6,8 +6,9 @@ import cats.data.EitherT
 import scala.concurrent._
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Try, Success, Failure}
+import cats.data.Validated.{Valid, Invalid}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
@@ -16,7 +17,9 @@ import com.victorqrt.playground.PostOrderCalc._
 import com.victorqrt.playground.WriterExercise._
 import com.victorqrt.playground.ReaderExercise._
 import com.victorqrt.playground.MyFunctor.Tree._
+import com.victorqrt.playground.FoldableExercise._
 import com.victorqrt.playground.MonadTransformers._
+import com.victorqrt.playground.SemigroupalExercise._
 import com.victorqrt.playground.EvalExercise.foldRightEval
 import com.victorqrt.playground.MyMonoid.{BooleanMyMonoid_And, MyMonoidOps}
 
@@ -41,14 +44,14 @@ object Tests {
    */
 
   val optEq = Eq.apply[Option[Int]]
-  
+
   implicit val catEq: Eq[Kitty] = Eq.instance[Kitty] {
     (k1, k2) => (
       k1.name === k2.name && k1.age === k2.age && k1.color === k2.color
     )
   }
 
-  val kitty1 = Kitty("Garfield", 7, "orange")  
+  val kitty1 = Kitty("Garfield", 7, "orange")
   val kitty2 = Kitty("Brice", 9, "blue")
 
   /*
@@ -61,7 +64,7 @@ object Tests {
   final case class Order(totalCost: Double, qty: Double)
 
   implicit object OrderMonoid extends Monoid[Order] {
-    
+
     def combine(o1: Order, o2: Order): Order =
       Order(
         o1.totalCost + o2.totalCost,
@@ -91,13 +94,13 @@ object Tests {
            kitty1.show == "Garfield is a 7 years old orange kitty"
         && kitty1 =!= kitty2
       )
-      
-      /* 
+
+      /*
        * Here we would need to retype as we only have
        * an implicit instance for the superclass:
        * (Some(1): Option[Int]) =!= (None: Option[Int])
        */
-      
+
       assert(Option(1) =!= Option.empty[Int])
 
       // Using the AND typeclass instance (see Monoids.scala)
@@ -110,7 +113,7 @@ object Tests {
         && (Order(3.14, 2.0) |+| Order(2.86, 4.0)) ==  Order(6.0, 6.0)
         && t.map(2 * _) == Branch(Leaf(2), Leaf(4))
       )
-      
+
       val m = 50000
       assert(
         foldRightEval((1 to m).toList, 0: BigInt)(_ + _).value == BigInt(m) * (m + 1) / 2
@@ -176,6 +179,30 @@ object Tests {
         && Await.result(canSpecialMove("Jazz", "Bumblebee").value, 1.second)  == Right(false)
         && Await.result(canSpecialMove("Jazz", "Goldorak").value, 1.second) == Left("Goldorak unreachable")
         && tacticalReport("Jazz", "Hot Rod") == "Yes"
+      )
+
+      assert(
+           getName(Map("name" -> "Guthrie Govan")) == Right("Guthrie Govan")
+        && getName(Map()) == Left(List("name field not specified"))
+        && parseInt("484") == Right(484)
+        && parseInt("foo") == Left(List("must be an integer"))
+        && readUser(Map("age" -> "64", "name" -> "Bernard Tapie")) == Valid(
+             User("Bernard Tapie", 64)
+           )
+        && readUser(Map("age" -> "-64", "name" -> "")) == Invalid(List(
+            "Unexpected empty string",
+            "Unexpected negative integer"
+           ))
+      )
+
+      val lst: List[Int] = (1 to 100 toList)
+      assert(
+           lst.foldLeft(Nil: List[Int])((a, i) => i :: a) == lst.reverse
+        && lst.foldRight(Nil: List[Int])((i, a) => i :: a) == lst
+        && mapWithFold(lst)(2 * _) == lst.map(2 * _)
+        && flatMapWithFold(lst)(x => List(x)) == lst.flatMap(x => List(x))
+        && filterWithFold(lst)(_ % 2 == 0) == lst.filter(_ % 2 == 0)
+        && sumWithFold(lst) == lst.sum
       )
     }
 

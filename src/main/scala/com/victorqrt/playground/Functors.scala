@@ -21,7 +21,7 @@ object MyFunctor {
    */
 
   object Tree {
-    
+
     def map[A, B](t: Tree[A])(f: A => B): Tree[B] =
       t.fold(x => Leaf(f(x)): Tree[B])(Branch(_, _))
 

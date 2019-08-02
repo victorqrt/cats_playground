@@ -43,6 +43,12 @@
       <artifactId>cats-core_2.12</artifactId>
       <version>2.0.0-M4</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.typelevel</groupId>
+      <artifactId>cats-effect_2.12</artifactId>
+      <version>2.0.0-M4</version>
+    </dependency>
  
   </dependencies>
 
@@ -62,6 +68,7 @@
               <args>
                 <arg>-dependencyfile</arg>
                 <arg>${project.build.directory}/.scala_dependencies</arg>
+                <arg>-Ypartial-unification</arg>
               </args>
             </configuration>
           </execution>

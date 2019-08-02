@@ -13,9 +13,9 @@ object MonadTransformers {
   type Response[A] = EitherT[Future, String, A]
 
   val powerLevels = Map(
-      "Jazz" -> 6,
-      "Bumblebee" -> 8,
-      "Hot Rod" -> 10
+    "Jazz" -> 6,
+    "Bumblebee" -> 8,
+    "Hot Rod" -> 10
   )
 
   def getPowerLevel(name: String): Response[Int] =
