@@ -12,6 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
+import com.victorqrt.playground.MapReduce._
 import com.victorqrt.playground.TreeExercise._
 import com.victorqrt.playground.PostOrderCalc._
 import com.victorqrt.playground.WriterExercise._
@@ -114,9 +115,8 @@ object Tests {
         && t.map(2 * _) == Branch(Leaf(2), Leaf(4))
       )
 
-      val m = 50000
       assert(
-        foldRightEval((1 to m).toList, 0: BigInt)(_ + _).value == BigInt(m) * (m + 1) / 2
+        foldRightEval((1 to n).toList, 0: BigInt)(_ + _).value == BigInt(n) * (n + 1) / 2
       )
 
       val Vector((log1, ans1), (log2, ans2)) =
@@ -203,6 +203,26 @@ object Tests {
         && flatMapWithFold(lst)(x => List(x)) == lst.flatMap(x => List(x))
         && filterWithFold(lst)(_ % 2 == 0) == lst.filter(_ % 2 == 0)
         && sumWithFold(lst) == lst.sum
+      )
+
+      val hosts = Map("host1" -> 10, "host2" -> 6)
+      val expected = hosts.values.sum
+
+      val client = new RealUptimeClient(hosts)
+      val testClient = new TestUptimeClient(hosts)
+      val service = new UptimeService(client)
+      val testService = new UptimeService(testClient)
+      
+      // Async and sync
+      assert(
+           Await.result(service.getTotalUptime(hosts.keys.toList), 1.second) == expected
+        && testService.getTotalUptime(hosts.keys.toList) == expected
+      )
+
+      val strs = Vector("foo", "bar", "baz")
+      assert(
+           Await.result(parallelFoldMap(strs)(_.reverse), 1.second) == "oofrabzab"
+        && Await.result(catsParallelFoldMap(strs)(_.reverse), 1.second) == "oofrabzab"
       )
     }
 
