@@ -140,7 +140,7 @@ object TreeExercise {
       @tailrec
       def loop(open: List[Tree[Either[A, B]]], closed: List[Option[Tree[B]]]): List[Tree[B]] =
         open match {
-          
+
           case Branch(l, r) :: next =>
             loop(l :: r :: next, None :: closed)
 

@@ -1,10 +1,10 @@
 package com.victorqrt.playground
 
-trait Semigroup[A] {
+trait MySemigroup[A] {
   def combine(x: A, y: A): A
 }
 
-trait MyMonoid[A] extends Semigroup[A] {
+trait MyMonoid[A] extends MySemigroup[A] {
   def empty: A
 }
 

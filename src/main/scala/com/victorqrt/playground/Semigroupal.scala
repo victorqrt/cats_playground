@@ -21,7 +21,7 @@ object SemigroupalExercise {
 
   type Form = Map[String, String]
   type FailFast[A] = Either[List[String], A]
-  type FailAcc[A] = Validated[List[String], A] 
+  type FailAcc[A] = Validated[List[String], A]
 
   /*
    * Now the basic error-aware functions
@@ -35,7 +35,7 @@ object SemigroupalExercise {
   /* ^
    * Or: val getName = getValue("name") _
    */
-  
+
   val getAge = getValue("age") _
 
   def parseInt(data: String): FailFast[Int] =

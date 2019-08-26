@@ -212,7 +212,7 @@ object Tests {
       val testClient = new TestUptimeClient(hosts)
       val service = new UptimeService(client)
       val testService = new UptimeService(testClient)
-      
+
       // Async and sync
       assert(
            Await.result(service.getTotalUptime(hosts.keys.toList), 1.second) == expected
