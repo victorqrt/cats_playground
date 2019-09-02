@@ -10,6 +10,7 @@ import scala.util.{Try, Success, Failure}
 import cats.data.Validated.{Valid, Invalid}
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import com.victorqrt.playground.Check._
 import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyFunctor._
 import com.victorqrt.playground.MapReduce._
@@ -224,6 +225,12 @@ object Tests {
            Await.result(parallelFoldMap(strs)(_.reverse), 1.second) == "oofrabzab"
         && Await.result(catsParallelFoldMap(strs)(_.reverse), 1.second) == "oofrabzab"
       )
+
+      /*
+       * DataValidation tests are separated
+       */
+
+      DataValidationTests.run
     }
 
     Try(go) match {
