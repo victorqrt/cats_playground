@@ -1,29 +1,30 @@
 package com.victorqrt.playground
 
 import cats._
-import cats.implicits._
 import cats.data.EitherT
+import cats.data.Validated.{Valid, Invalid}
+import cats.implicits._
 import scala.concurrent._
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Try, Success, Failure}
-import cats.data.Validated.{Valid, Invalid}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Try, Success, Failure}
 
 import com.victorqrt.playground.Check._
-import com.victorqrt.playground.MyMonad._
-import com.victorqrt.playground.MyFunctor._
-import com.victorqrt.playground.MapReduce._
-import com.victorqrt.playground.TreeExercise._
-import com.victorqrt.playground.PostOrderCalc._
-import com.victorqrt.playground.WriterExercise._
-import com.victorqrt.playground.ReaderExercise._
-import com.victorqrt.playground.MyFunctor.Tree._
-import com.victorqrt.playground.FoldableExercise._
-import com.victorqrt.playground.MonadTransformers._
-import com.victorqrt.playground.SemigroupalExercise._
 import com.victorqrt.playground.EvalExercise.foldRightEval
+import com.victorqrt.playground.FoldableExercise._
+import com.victorqrt.playground.Kleislis._
+import com.victorqrt.playground.MapReduce._
+import com.victorqrt.playground.MonadTransformers._
+import com.victorqrt.playground.MyFunctor._
+import com.victorqrt.playground.MyFunctor.Tree._
+import com.victorqrt.playground.MyMonad._
 import com.victorqrt.playground.MyMonoid.{BooleanMyMonoid_And, MyMonoidOps}
+import com.victorqrt.playground.PostOrderCalc._
+import com.victorqrt.playground.ReaderExercise._
+import com.victorqrt.playground.SemigroupalExercise._
+import com.victorqrt.playground.TreeExercise._
+import com.victorqrt.playground.WriterExercise._
 
 object Tests {
 
@@ -231,6 +232,7 @@ object Tests {
        */
 
       DataValidationTests.run
+      Kleislis.run
     }
 
     Try(go) match {

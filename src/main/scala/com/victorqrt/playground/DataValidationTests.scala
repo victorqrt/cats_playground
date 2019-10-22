@@ -9,7 +9,6 @@ object DataValidationTests {
 
   type Errors = NonEmptyList[String]
   type StringOrErrorsPred = Predicate[Errors, String]
-  type StringPairOrErrorsPred = Predicate[Errors, (String, String)]
 
   def error(s: String): Errors = NonEmptyList(s, Nil)
 
@@ -52,5 +51,28 @@ object DataValidationTests {
            "Must be longer than 3 chars", "Must only contain alphanumeric chars"
          ))
     )
+
+    /*
+
+    val splitEmail: Check[Errors, String, (String, String)] =
+    Check(
+        Predicate {
+          case s: String => s.split('@') match {
+            case Array(name, domain) => NonEmptyList.of((name, domain)).valid
+            case _                   => "Must contain one @".invalidNel[(String, String)]
+          }
+        }
+      )
+
+    val joinEmail: Check[Errors, (String, String), String] =
+    Check {
+        case (l, r) =>
+          (longerThan(0), longerThan(3) and contains('.')).mapN(_ + "@" + _)
+      }
+
+    val checkEmail: Check[Errors, String, String] =
+      splitEmail andThen joinEmail
+
+    */
   }
 }

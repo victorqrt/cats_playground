@@ -20,6 +20,9 @@ import cats.Semigroup
 sealed trait Predicate[E, A] {
   import Predicate._
 
+  def run(a: A)(implicit s: Semigroup[E]): Either[E, A] =
+    this(a).toEither
+
   def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] =
     this match {
       case Pure(f) => f(a)
