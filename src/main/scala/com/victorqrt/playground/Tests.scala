@@ -111,7 +111,7 @@ object Tests {
 
       val n = 42
       assert(
-           add(1 to n toList) == n * (n + 1) / 2
+           add((1 to n).toList) == n * (n + 1) / 2
         && add(List(Some(1), Some(2), None)) == Some(3)
         && (Order(3.14, 2.0) |+| Order(2.86, 4.0)) ==  Order(6.0, 6.0)
         && t.map(2 * _) == Branch(Leaf(2), Leaf(4))
@@ -197,7 +197,7 @@ object Tests {
            ))
       )
 
-      val lst: List[Int] = (1 to 100 toList)
+      val lst: List[Int] = ((1 to 100).toList)
       assert(
            lst.foldLeft(Nil: List[Int])((a, i) => i :: a) == lst.reverse
         && lst.foldRight(Nil: List[Int])((i, a) => i :: a) == lst
