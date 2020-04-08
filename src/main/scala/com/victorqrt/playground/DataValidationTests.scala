@@ -38,7 +38,7 @@ object DataValidationTests {
    * Tests
    */
 
-  def run {
+  def run: Unit = {
 
     val usernameCheck = Check(
       longerThan(3) and alphanumeric

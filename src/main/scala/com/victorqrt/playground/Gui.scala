@@ -16,7 +16,7 @@ class Gui {
 object Gui {
 
   class Console(var output: TextArea) extends OutputStream {
-    override def write(i: Int) {
+    override def write(i: Int): Unit = {
       Platform.runLater(() => output.appendText(String.valueOf(i.asInstanceOf[Char])));
     }
   }

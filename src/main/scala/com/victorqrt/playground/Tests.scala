@@ -87,9 +87,9 @@ object Tests {
    * Ran by the main app
    */
 
-  def run {
+  def run: Unit = {
 
-    def go {
+    def go: Unit = {
 
       println("Running  tests...")
 
@@ -233,14 +233,7 @@ object Tests {
 
       DataValidationTests.run
       Kleislis.run
-
-      val gc1 = GCounter(Map("a" -> 2, "b" -> 0))
-      val gc2 = GCounter(Map("a" -> 1, "b" -> 3))
-
-      assert(
-           (gc1 merge gc2) == GCounter(Map("a" -> 2, "b" -> 3))
-        && (gc1 merge gc2.increment("a", 2)).total == 6
-      )
+      CrdtTests.run
     }
 
     Try(go) match {

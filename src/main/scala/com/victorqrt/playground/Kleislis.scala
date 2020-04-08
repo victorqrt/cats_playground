@@ -54,7 +54,7 @@ object Kleislis {
   val checkEmail: KCheck[String, String] =
     splitEmail andThen joinEmail
 
-  def run {
+  def run: Unit = {
     val email = "vquerette@gmail.com"
     assert(
          checkEmail.run(email) == Right(email)

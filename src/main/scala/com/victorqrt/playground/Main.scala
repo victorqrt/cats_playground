@@ -27,7 +27,7 @@ object Main extends IOApp {
 
 class Playground extends Application {
 
-  override def start(primaryStage: Stage) {
+  override def start(primaryStage: Stage): Unit = {
 
     /*
      * JavaFX setup
@@ -51,7 +51,7 @@ class Playground extends Application {
     primaryStage.show
 
     new Thread {
-      override def run { Tests.run }
+      override def run: Unit = { Tests.run }
     }.start
   }
 }
